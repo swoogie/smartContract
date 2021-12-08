@@ -1,0 +1,14 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "description": "app with smart contracts",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "apptest"
+  },
+  "author": "ignasbieksa@gmail.com",
+  "license": "ISC"
+}
