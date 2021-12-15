@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 
 document.getElementById("revealcontractaddress").onclick = () => {
   header2.innerText = "Contract address: " + address;
+  header2.style = "margin: 0px;";
   document.getElementById("revealcontractaddress").style = "display: none;";
 };
 

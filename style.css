@@ -11,26 +11,29 @@ body{
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
-    background: linear-gradient(#222222,80%,#1a1a1a);
+    background: linear-gradient(#1f262e,80%,#121820);
     overflow-y: hidden;
     overflow-x: hidden;
     margin: 100px;
 } 
-
 h2{
     display: inline;
     color: white;
     margin: 5px;
+    word-break: break-all;
 }
 h3{
     color: white;
     margin: 5px;
+    word-break: break-all;
 }
 input[type=text]{
     width: 98%;
     padding: 12px;
     margin: 5px;
-    border: 1px solid #ccc;
+    border: none;
+    background-color: #171B20;
+    color: white;
     border-radius: 4px;
     box-sizing: border-box;
 }
