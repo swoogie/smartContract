@@ -4,10 +4,12 @@ pragma solidity ^0.8.10;
 contract Deal {
   address payable public owner;
   address public buyerAddr;
+  address payable public courier;
 
-  constructor(address _buyerAddr){
+  constructor(address _buyerAddr, address payable _courier){
     owner = payable(msg.sender);
     buyerAddr = _buyerAddr;
+    courier = _courier;
   }
 
   struct Buyer {
@@ -17,7 +19,6 @@ contract Deal {
   }
 
   struct Shipment {
-    address payable courier;
     address payer;
     uint price;
     uint safepay;
@@ -60,16 +61,12 @@ contract Deal {
 
   event OrderDelivered(address buyer, uint invoiceno, uint orderno, uint real_delivey_date, address courier);
 
-
-
   function sendOrder(string memory goods, uint quantity) payable public {
     require(msg.sender == buyerAddr, "only buyers can send orders");
 
     orderIndex++;
 
-    address payable blaccHole;
-    blaccHole = payable(address(0));
-    orders[orderIndex] = Order(goods, quantity, orderIndex, 0, 0, Shipment(blaccHole, address(0), 0, 0, 0, 0, false), true);
+    orders[orderIndex] = Order(goods, quantity, orderIndex, 0, 0, Shipment(address(0), 0, 0, 0, 0, false), true);
 
     emit OrderSent(msg.sender, goods, quantity, orderIndex);
   }
@@ -81,8 +78,16 @@ contract Deal {
     return(buyerAddr, orders[number].goods, orders[number].quantity, orders[number].price, orders[number].safepay, orders[number].shipment.price, orders[number].shipment.safepay);
   }
 
-  function returnOwner() view public returns (address payable owneraddr){
-    return(owner);
+  function returnOwner() view public returns (address payable){
+    return owner;
+  }
+
+  function getBuyer() view public returns (address){
+    return buyerAddr;
+  }
+
+  function returnCourier() view public returns (address payable){
+    return courier;
   }
 
   function sendPrice(uint orderno, uint price, int8 ttype) payable public {
@@ -117,7 +122,7 @@ contract Deal {
     emit SafepaySent(msg.sender, orderno, msg.value, block.timestamp);
   }
 
-  function sendInvoice(uint orderno, uint delivery_date, address payable courier) payable public {
+  function sendInvoice(uint orderno, uint delivery_date) payable public {
 
     require(orders[orderno].init, "invalid order id");
 
@@ -128,40 +133,35 @@ contract Deal {
     invoices[invoiceIndex] = Invoice(orderno, invoiceIndex, true);
 
     orders[orderno].shipment.date    = delivery_date;
-    orders[orderno].shipment.courier = courier;
 
     emit InvoiceSent(buyerAddr, invoiceIndex, orderno, delivery_date, courier);
   }
 
-  function getInvoice(uint invoiceno) view public returns (address buyer, uint orderno, uint delivery_date, address courier){
+  function getInvoice(uint invoiceno) view public returns (address, uint, uint, address payable){
   
     require(invoices[invoiceno].init, "invalid invoice id");
 
     Invoice storage _invoice = invoices[invoiceno];
-    Order storage _order     = orders[_invoice.orderno];
+    Order storage _order = orders[_invoice.orderno];
 
-    return (buyerAddr, _order.number, _order.shipment.date, _order.shipment.courier);
+    return (buyerAddr, _order.number, _order.shipment.date, courier);
   }
 
   function delivery(uint invoiceno, uint timestamp) payable public {
 
-    require(invoices[invoiceno].init, "invalid invoice id");
+    /// require(invoices[invoiceno].init, "invalid invoice id");
 
     Invoice storage _invoice = invoices[invoiceno];
     Order storage _order     = orders[_invoice.orderno];
 
-    require(_order.shipment.courier == msg.sender, "only the courier can finish delivery");
+    /// require(_order.shipment.courier == msg.sender, "only the courier can finish delivery");
 
-    emit OrderDelivered(buyerAddr, invoiceno, _order.number, timestamp, _order.shipment.courier);
+    emit OrderDelivered(buyerAddr, invoiceno, _order.number, timestamp, courier);
 
     /// Payout
     owner.transfer(_order.safepay);
 
-    _order.shipment.courier.transfer(_order.shipment.safepay);
+    courier.transfer(_order.shipment.safepay);
 
-  }
-
-  function health() pure public returns (string memory) {
-    return "running";
   }
 }

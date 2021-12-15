@@ -5,6 +5,11 @@ var abi = [
 				"internalType": "address",
 				"name": "_buyerAddr",
 				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_courier",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -210,6 +215,19 @@ var abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "courier",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -228,6 +246,19 @@ var abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getBuyer",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -239,22 +270,22 @@ var abi = [
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "buyer",
+				"name": "",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "orderno",
+				"name": "",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "delivery_date",
+				"name": "",
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "courier",
+				"internalType": "address payable",
+				"name": "",
 				"type": "address"
 			}
 		],
@@ -263,15 +294,15 @@ var abi = [
 	},
 	{
 		"inputs": [],
-		"name": "health",
+		"name": "orderIndex",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint256",
 				"name": "",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "pure",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -338,11 +369,24 @@ var abi = [
 	},
 	{
 		"inputs": [],
+		"name": "returnCourier",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "returnOwner",
 		"outputs": [
 			{
 				"internalType": "address payable",
-				"name": "owneraddr",
+				"name": "",
 				"type": "address"
 			}
 		],
@@ -360,11 +404,6 @@ var abi = [
 				"internalType": "uint256",
 				"name": "delivery_date",
 				"type": "uint256"
-			},
-			{
-				"internalType": "address payable",
-				"name": "courier",
-				"type": "address"
 			}
 		],
 		"name": "sendInvoice",

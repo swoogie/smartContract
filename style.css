@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+*{
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    scroll-behavior: smooth;
+}
+body{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background: linear-gradient(#222222,80%,#1a1a1a);
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 100px;
+} 
+
+h2{
+    display: inline;
+    color: white;
+    margin: 5px;
+}
+h3{
+    color: white;
+    margin: 5px;
+}
+input[type=text]{
+    width: 98%;
+    padding: 12px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=button]:hover{
+    transition: background-color, 0.2s;
+    background-color: #b44800;
+}
+
+
+input[type=button]{
+    background-color: #ff6600;
+    color: white;
+    padding: 12px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    transition: background-color, 0.2s;
+}
+
+#orderDiv{
+    display: flex;
+
+}
+
+#mainDiv{
+    width: 80%
+}
+
+#sendPaymentDiv{
+    display: flex;
+}
+
+#buyerInterface{
+    flex-direction: column;
+}
