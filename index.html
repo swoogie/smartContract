@@ -8,79 +8,74 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./sm_abi.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
   <body>
     <div>
-    <div>
-    <div>
-      <h2 id="contractaddress">Contract address</h2>
-      <input type="button" id="revealcontractaddress" value="Reveal" />
-    </div>
-    <div>
-      <h3 id="selectedAccount">Account: </h3>
-    </div>
-  </div>
-
-    <div id="buyerInterface" style="display: none;">
-      
-      <div id="orderDiv">
-        <input id="orderitem" type="text" placeholder="Order item" />
-        <input id="orderquantity" type="text" placeholder="Order quantity" />
-        <input id="sendOrder" type="button" value="Send order" />
-      </div>
-      <div id="paymentDiv">
+      <div>
         <div>
-          <h3 id="orderPrice">Order no. # Price: #</h3>
+          <h2 id="contractaddress">Contract address</h2>
+          <input type="button" id="revealcontractaddress" value="Reveal" />
         </div>
-        <div id="sendPaymentDiv">
-          <input id="sendToOrderId" type="text" placeholder="Order ID" />
-          <input id="sendPayment" type="button" value="Send payment" />
+        <div>
+          <h3 id="selectedAccount">Account:</h3>
         </div>
       </div>
+
+      <div id="buyerInterface" style="display: none">
+        <div id="orderDiv">
+          <input id="orderitem" type="text" placeholder="Order item" />
+          <input id="orderquantity" type="text" placeholder="Order quantity" />
+          <input id="sendOrder" type="button" value="Send order" />
+        </div>
+        <div id="paymentDiv">
+          <div>
+            <h3 id="orderPrice">Pay for order</h3>
+          </div>
+          <div id="sendPaymentDiv">
+            <input id="sendToOrderId" type="text" placeholder="Order ID" />
+            <input id="sendPayment" type="button" value="Send payment" />
+          </div>
+        </div>
       </div>
       <div id="sellerInterface">
         <div id="sendPrice">
           <input id="orderIndex" type="text" placeholder="Order number" />
           <input id="price" type="text" placeholder="Price" />
-          <input id="sendPrice" type="button" value="Send order price" />
+          <input id="sendOrderPrice" type="button" value="Send order price" />
           <input id="sendShipPrice" type="button" value="Send shipment price" />
         </div>
       </div>
 
-      <div id="courierInterface" style="display: none;">
-        <div>
+      <div id="courierInterface" style="display: none">
+        <div style="display: flex">
           <input id="invoiceIndex" type="text" placeholder="Invoice number" />
           <input id="timeStamp" type="text" placeholder="Delivered when" />
           <input id="confirmDelivery" type="button" value="Confirm delivery" />
         </div>
       </div>
 
-    <div id="queryOrder" >
-      <h3>Check on order: </h3>
-      <div style="Display: flex;">
-        <input id="checkOrderID" type="text" placeholder="Enter order ID">
-        <input id="findOrder" type="button" value="Find/Refresh order" >
+      <div id="queryOrder">
+        <h3>Check on order:</h3>
+        <div style="display: flex">
+          <input id="checkOrderID" type="text" placeholder="Enter order ID" />
+          <input id="findOrder" type="button" value="Find/Refresh order" />
+        </div>
+        <h3 id="orderDetails"></h3>
+        <p id="moreOrderDetails"></p>
       </div>
-      <h3 id="orderDetails">Order # details: </h3>
-      <h3 id="moreOrderDetails"></h3>
-    </div> 
-  </div>
-      <script src="./app.js"></script>
+
+      <div id="queryInvoice">
+        <h3>Check invoice:</h3>
+        <div style="display: flex">
+          <input id="checkInvoiceID" type="text" placeholder="Enter order ID" />
+          <input id="findInvoice" type="button" value="Find/Refresh invoice" />
+        </div>
+        <h3 id="invoiceDetails"></h3>
+        <p id="moreInvoiceDetails"></p>
+      </div>
+    </div>
+    <script src="./app.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 const orderItem = document.getElementById("orderitem");
 const orderQuantity = document.getElementById("orderquantity");
 const header2 = document.getElementById("contractaddress");
-var address = "0x881aaFab46Aa685cC060470eF0136483c9D62D69";
+var address = "0x9b6938B30aB1260Ce52A37368cF5381f1F2Ab9e4";
 
 document.addEventListener("DOMContentLoaded", async function (event) {
   web3 = new Web3("HTTP://127.0.0.1:7545");
@@ -15,11 +15,6 @@ document.getElementById("revealcontractaddress").onclick = () => {
   header2.style = "margin: 0px;";
   document.getElementById("revealcontractaddress").style = "display: none;";
 };
-
-// const getowneraddress = document.getElementById("getowneraddress");
-// getowneraddress.onclick = async function () {
-//   getowneraddress.value = await contract.methods.returnOwner().call();
-// };
 
 async function getCourierAddr(){
     const courierAddr = await contract.methods.returnCourier().call();
@@ -62,12 +57,6 @@ async function checkIfAddr() {
   const ownerAddr = await getOwnerAddr();
   const courierAddr = await getCourierAddr();
 
-  // const buyerAddr = await contract.methods.getBuyer().call();
-  
-  // console.log(curAcc.;
-  // console.log(buyerAddr);
-  // console.log(ownerAddr);
-
   sellerInterface.style = "Display: none;";
   courierInterface.style = "Display: none;";
   buyerInterface.style = "Display: none;";
@@ -84,6 +73,7 @@ async function checkIfAddr() {
 const sendOrder = document.getElementById("sendOrder");
 const sendPayment = document.getElementById("sendPayment");
 const confirmDelivery = document.getElementById("confirmDelivery");
+
 confirmDelivery.onclick = async () => {
   const invoiceIndex = document.getElementById("invoiceIndex");
   const timeStamp = document.getElementById("timeStamp");
@@ -93,7 +83,7 @@ confirmDelivery.onclick = async () => {
     .delivery(invoiceIndex.value, timeStamp.value)
     .send({ from: currentAccount })
     .on("transactionHash", (hash) => {
-      alert("a");
+      alert("Delivery completed!");
     });
 };
 const orderPrice = document.getElementById("orderPrice");
@@ -107,17 +97,30 @@ sendOrder.onclick = async () => {
     .sendOrder(orderItem.value, parseInt(orderQuantity.value))
     .send({ from: currentAccount, gas: 1500000, gasPrice: '300' })
     .on("transactionHash", (hash) => {
-      //alert("a");
+      alert("Item ordered");
     });  
-  var orderIndex = await contract.methods.orderIndex().call(); 
-  orderPrice.innerText = "Order no. " + orderIndex + " Price: to be set"
+//   var orderIndex = await contract.methods.orderIndex().call(); 
+//   orderPrice.innerText = "Pay for order" + orderIndex;
 };
 
 sendPayment.onclick = async () => {
-  const sendPayment = document.getElementById("sendToOrderId");
+  const sendToOrderId = document.getElementById("sendToOrderId");
+  const currentAccount = await getAccounts();
+  const orderInfo = await contract.methods.queryOrder(sendToOrderId.value).call();
+  const priceToPay = parseInt(orderInfo.price) + parseInt(orderInfo.delivery_price);
+  console.log(priceToPay);
+  await contract.methods
+    .sendSafepay(sendToOrderId.value).send( {from: currentAccount, value: priceToPay} ).on("error", () => {
+        console.log("rejected");
+    }).on("transactionHash", (hash) => {
+        alert("Payment sent!");
+    });
+  const ownerAddr = await contract.methods.returnOwner().call();
+  const d = new Date();
+  const dMonth = d.getMonth+1;
+  await contract.methods
+    .sendInvoice(sendToOrderId.value, d.getFullYear+dMonth+d.getDate()).send( {from: ownerAddr} );
 };
-
-// checkIfAddr();
 
 const findOrder = document.getElementById("findOrder");
 
@@ -133,10 +136,28 @@ findOrder.onclick = async () => {
                                + "Quantity: " + orderInfo.quantity + "\n"
                                + "Price: " + orderInfo.price + "\n"
                                + "Delivery price: " + orderInfo.delivery_price + "\n"
-                               + "Price paid: " + orderInfo.safepay + "\n"; 
+                               + "Price paid: " + orderInfo.safepay + "\n"
+                               + "Delivery price paid: " + orderInfo.delivery_safepay; 
 }
 
-const sendOrderPrice = document.getElementById("sendPrice");
+const findInvoice = document.getElementById("findInvoice");
+
+findInvoice.onclick = async () => {
+    const invoiceDetails = document.getElementById("invoiceDetails");
+    const checkInvoiceID = document.getElementById("checkInvoiceID");
+    const moreInvoiceDetails = document.getElementById("moreInvoiceDetails");
+    const invoiceInfo = await contract.methods.getInvoice(checkInvoiceID.value).call();
+    console.log(invoiceInfo);
+
+    invoiceDetails.innerText = "Invoice " + checkInvoiceID.value + " details: ";
+    moreInvoiceDetails.innerText = "Confirmed order no.: " + invoiceInfo[1] + "\n" 
+                                 + "Delivery date: " + invoiceInfo[2].substring(0, 4) + "-"
+                                 + invoiceInfo[2].substring(4, 6) + "-"
+                                 + invoiceInfo[2].substring(6, 8);
+    
+}
+
+const sendOrderPrice = document.getElementById("sendOrderPrice");
 const sendShipmentPrice = document.getElementById("sendShipPrice");
 
 sendOrderPrice.onclick = async () => {

@@ -360,7 +360,7 @@ var abi = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "delivey_safepay",
+				"name": "delivery_safepay",
 				"type": "uint256"
 			}
 		],

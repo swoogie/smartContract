@@ -10,10 +10,10 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 100vh;
+    min-height: 100%;
     background: linear-gradient(#1f262e,80%,#121820);
-    overflow-y: hidden;
-    overflow-x: hidden;
+    background-repeat:no-repeat;
+    background-attachment: fixed;
     margin: 100px;
 } 
 h2{
@@ -69,4 +69,11 @@ input[type=button]{
 
 #buyerInterface{
     flex-direction: column;
+}
+
+p{
+    margin: 0px;
+    margin-left: 10px;
+    size: 1px;
+    color: #b8b8b8;
 }
