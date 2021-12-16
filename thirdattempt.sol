@@ -46,7 +46,7 @@ contract Deal {
   mapping (uint => Order) orders;
   mapping (uint => Invoice) invoices;
 
-  uint orderIndex;
+  uint public orderIndex;
   uint invoiceIndex;
 
   event BuyerRegistered(address buyer, string name);
@@ -61,7 +61,7 @@ contract Deal {
 
   event OrderDelivered(address buyer, uint invoiceno, uint orderno, uint real_delivey_date, address courier);
 
-  function sendOrder(string memory goods, uint quantity) payable public {
+  function sendOrder(string memory goods, uint quantity) payable public{
     require(msg.sender == buyerAddr, "only buyers can send orders");
 
     orderIndex++;
@@ -71,7 +71,7 @@ contract Deal {
     emit OrderSent(msg.sender, goods, quantity, orderIndex);
   }
 
-  function queryOrder(uint number) view public returns (address buyer, string memory goods, uint quantity, uint price, uint safepay, uint delivery_price, uint delivey_safepay) {
+  function queryOrder(uint number) view public returns (address buyer, string memory goods, uint quantity, uint price, uint safepay, uint delivery_price, uint delivery_safepay) {
     
     require(orders[number].init, "invalid order id");
 
@@ -117,7 +117,9 @@ contract Deal {
     require(buyerAddr == msg.sender, "must be buyer");
 
     require((orders[orderno].price + orders[orderno].shipment.price) == msg.value, "msg.value does not match");
-    orders[orderno].safepay = msg.value;
+
+    orders[orderno].shipment.safepay = msg.value - orders[orderno].price;
+    orders[orderno].safepay = msg.value - orders[orderno].shipment.safepay;
 
     emit SafepaySent(msg.sender, orderno, msg.value, block.timestamp);
   }
