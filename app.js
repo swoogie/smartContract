@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", async function (event) {
   await checkIfAddr();
 });
 
-
-
 document.getElementById("revealcontractaddress").onclick = () => {
   header2.innerText = "Contract address: " + address;
   header2.style = "margin: 0px;";
@@ -104,9 +102,7 @@ sendOrder.onclick = async () => {
   const orderItem = document.getElementById("orderitem");
   const orderQuantity = document.getElementById("orderquantity");
   const currentAccount = await getAccounts();
-  console.log(currentAccount);
-  console.log(orderItem.value);
-  console.log(orderQuantity.value);
+
   await contract.methods
     .sendOrder(orderItem.value, parseInt(orderQuantity.value))
     .send({ from: currentAccount, gas: 1500000, gasPrice: '300' })
@@ -123,7 +119,47 @@ sendPayment.onclick = async () => {
 
 // checkIfAddr();
 
+const findOrder = document.getElementById("findOrder");
 
+findOrder.onclick = async () => {
+    const orderDetails = document.getElementById("orderDetails");
+    const checkOrderID = document.getElementById("checkOrderID");
+    const moreOrderDetails = document.getElementById("moreOrderDetails");
+    const orderInfo = await contract.methods.queryOrder(checkOrderID.value).call();
+    console.log(orderInfo);    
+    //var orderIndex = await contract.methods.orderIndex().call();
+    orderDetails.innerText = "Order " + checkOrderID.value + " details: "; 
+    moreOrderDetails.innerText = "Goods: " + orderInfo.goods + "\n"
+                               + "Quantity: " + orderInfo.quantity + "\n"
+                               + "Price: " + orderInfo.price + "\n"
+                               + "Delivery price: " + orderInfo.delivery_price + "\n"
+                               + "Price paid: " + orderInfo.safepay + "\n"; 
+}
+
+const sendOrderPrice = document.getElementById("sendPrice");
+const sendShipmentPrice = document.getElementById("sendShipPrice");
+
+sendOrderPrice.onclick = async () => {
+    const orderIndex = document.getElementById("orderIndex");
+    const price = document.getElementById("price");
+    const currentAccount = await getAccounts();
+
+    await contract.methods
+        .sendPrice(orderIndex.value, price.value, 1).send({ from: currentAccount }).on("transactionHash", (hash) => {
+            alert("Price set!")
+        })
+}
+
+sendShipmentPrice.onclick = async () => {
+    const orderIndex = document.getElementById("orderIndex");
+    const price = document.getElementById("price");
+    const currentAccount = await getAccounts();
+    
+    await contract.methods
+        .sendPrice(orderIndex.value, price.value, 2).send({ from: currentAccount }).on("transactionHash", (hash) => {
+            alert("Shipment price set!")
+        })
+}
 
 window.ethereum.on("accountsChanged", async function (accounts) {
   await getAccounts();
