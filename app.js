@@ -99,8 +99,6 @@ sendOrder.onclick = async () => {
     .on("transactionHash", (hash) => {
       alert("Item ordered");
     });  
-//   var orderIndex = await contract.methods.orderIndex().call(); 
-//   orderPrice.innerText = "Pay for order" + orderIndex;
 };
 
 sendPayment.onclick = async () => {
@@ -190,5 +188,3 @@ window.ethereum.on("accountsChanged", async function (accounts) {
   await getAccounts();
   checkIfAddr();
 });
-
-//contract.methods.sendOrder(orderItem.value, orderQuantity.value).send();
