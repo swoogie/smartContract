@@ -1,7 +1,7 @@
 const orderItem = document.getElementById("orderitem");
 const orderQuantity = document.getElementById("orderquantity");
 const header2 = document.getElementById("contractaddress");
-var address = "0x9b6938B30aB1260Ce52A37368cF5381f1F2Ab9e4";
+var address = "0x37Fc2B6b9B3D702694EEE811f96aaEC528c4f1Df";
 
 document.addEventListener("DOMContentLoaded", async function (event) {
   web3 = new Web3("HTTP://127.0.0.1:7545");
@@ -108,7 +108,6 @@ sendPayment.onclick = async () => {
   const currentAccount = await getAccounts();
   const orderInfo = await contract.methods.queryOrder(sendToOrderId.value).call();
   const priceToPay = parseInt(orderInfo.price) + parseInt(orderInfo.delivery_price);
-  console.log(priceToPay);
   await contract.methods
     .sendSafepay(sendToOrderId.value).send( {from: currentAccount, value: priceToPay} ).on("error", () => {
         console.log("rejected");
@@ -117,9 +116,15 @@ sendPayment.onclick = async () => {
     });
   const ownerAddr = await contract.methods.returnOwner().call();
   const d = new Date();
-  const dMonth = d.getMonth+1;
+  let dMonth = d.getMonth()+1;
+  let dYear = d.getFullYear();
+  let dDate = d.getDate();
+  let date = `${dYear}${dMonth}${dDate+7}`
+  console.log(date);
+
+  console.log(sendToOrderId.value);
   await contract.methods
-    .sendInvoice(sendToOrderId.value, d.getFullYear+dMonth+d.getDate()).send( {from: ownerAddr} );
+    .sendInvoice(sendToOrderId.value, date).send( {from: ownerAddr, gas: 1500000, gasPrice: '300'} );
 };
 
 const findOrder = document.getElementById("findOrder");
@@ -128,9 +133,8 @@ findOrder.onclick = async () => {
     const orderDetails = document.getElementById("orderDetails");
     const checkOrderID = document.getElementById("checkOrderID");
     const moreOrderDetails = document.getElementById("moreOrderDetails");
-    const orderInfo = await contract.methods.queryOrder(checkOrderID.value).call();
-    console.log(orderInfo);    
-    //var orderIndex = await contract.methods.orderIndex().call();
+    const orderInfo = await contract.methods.queryOrder(checkOrderID.value).call();   
+
     orderDetails.innerText = "Order " + checkOrderID.value + " details: "; 
     moreOrderDetails.innerText = "Goods: " + orderInfo.goods + "\n"
                                + "Quantity: " + orderInfo.quantity + "\n"

@@ -151,12 +151,12 @@ contract Deal {
 
   function delivery(uint invoiceno, uint timestamp) payable public {
 
-    /// require(invoices[invoiceno].init, "invalid invoice id");
+    require(invoices[invoiceno].init, "invalid invoice id");
 
     Invoice storage _invoice = invoices[invoiceno];
     Order storage _order     = orders[_invoice.orderno];
 
-    /// require(_order.shipment.courier == msg.sender, "only the courier can finish delivery");
+    require(courier == msg.sender, "only the courier can finish delivery");
 
     emit OrderDelivered(buyerAddr, invoiceno, _order.number, timestamp, courier);
 
